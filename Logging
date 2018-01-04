@@ -1,0 +1,40 @@
+Logging
+
+Logging is important to show errors, info, and debug data about an Application
+
+When you run one app it is easy to look for the log
+  - just opn the "app".log file
+  - or if deployed as a pod with kubectl logs.
+With K8s, 1 application will be running as one or many pods.
+  - Finding an error will be much more difficult
+    -What pod do you have to look at?
+
+Kubectl get logs to get the log details about a pod.
+
+ - You would have to
+  Look up the pod name
+  The container names
+  and then run kubectl logs for every container in every pod that is running for an app.
+
+  Note You can use both kubectl log and kubectl logs.
+
+Log Aggregation is the answer.
+  - Not kubernetes specific, exist in syslog since the 1980s
+
+Log Aggregation is now often implemented with more modern tools.
+  - The ELK Stack (ElasticSearch Logstsh and Kibana)
+  - Several Hosted service like loggly.com, papertrailapp.com
+    etc.
+
+This logging solution will be based on
+  - Fluentd (for log forwarding)
+  - Elasticsearch (for log indexing)
+  - Kibana (for visualisation)
+  - LogTrail (easy ui to show logs) a plugin for Kibana
+
+This solution is easily customizable to create custom dashboards to show what is
+important to you.
+
+
+
+....
