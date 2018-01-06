@@ -35,6 +35,8 @@ This logging solution will be based on
 This solution is easily customizable to create custom dashboards to show what is
 important to you.
 
+kubectl get nodes --show-labels
+
 
 
 ....
