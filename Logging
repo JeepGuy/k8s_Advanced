@@ -35,7 +35,35 @@ This logging solution will be based on
 This solution is easily customizable to create custom dashboards to show what is
 important to you.
 
+
+Once the cluster is up and running check on the basics and label the nodes.
+
+Kubectl get nodes
+
 kubectl get nodes --show-labels
+
+Label the nodes:
+----------------
+
+Can manually label  the nodes but automation is better.
+
+kubectl label nodes <NameOfNode>
+
+Automated:
+----------
+for i in 'kubectl get node | cut -d' ' -f 1 | grep internal' ; do kubectl label nodes ${i} beta.kubernetes.io/fluentd-ds-ready=true; done
+
+Decomposition of automated label script:
+----------------------------------------
+
+for i in 'kubectl get node   ==for index "i" in each of the stdout of kubectl get node
+| cut -d' ' -f 1              == give me the first part of the stdout
+| grep internal' ;            == grep on the internal part of the hostname
+do kubectl label nodes ${i} beta.kubernetes.io/fluentd-ds-ready=true;
+        == label each node using kubectl with the phrase   fluentd-ds-ready
+done                          == finish script.
+
+
 
 
 

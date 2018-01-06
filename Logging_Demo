@@ -166,6 +166,6 @@ A s3 bucket is required to store cluster state information.
 
 kops update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
 
-kops update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
+kops rolling-update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
 
 .....
