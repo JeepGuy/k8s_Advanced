@@ -1,0 +1,35 @@
+Taints and Tolerances
+
+
+kubectl get pods -o wide
+- see where the pods are running
+
+kubectl get node <>
+
+kubect describe nodes
+
+From:   https://www.youtube.com/watch?v=Qcgf-PrXo9g
+
+Taints will repel all pods that are scheduled unless they have a matching toleration.
+==================
+
+Taints:     dedicated=inception:NoSchedule  (from example)
+taints:            dedicated=notaerostat:NoSchedule   (??? just an idea)
+
+
+matching toleration
+
+tolerations:          (from example) this will allow the pod above to schedule on
+ -key: "dedicated"                   that node because the pod has the matching
+  operator: "Equal"                  toleration
+  value: "inception"
+  effect: "NoSchedule"
+
+  tolerations:
+   -key: "dedicated"
+    operator: "Equal"
+    value: "notaerostat"
+    effect: "NoSchedule"
+
+
+ ...
