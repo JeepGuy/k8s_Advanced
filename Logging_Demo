@@ -29,6 +29,7 @@ First remove your old AWS cluster with kops if you haven't already done so...
 REMOVE CLUSTER COMMAND
 ----------------------
   kops delete cluster --name kubernetes.jbrent.info  --state=s3://kops-state-ran0mstring1 --yes
+  kops delete cluster --state=s3://kops-state-ran0mstring1
 
 The parameters in the kops command are as follows:
 
@@ -37,135 +38,57 @@ The old command in the first course:
 kops create cluster --name=kubernetes.jbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=2
 --node-count=2 --node-size=t2.micro --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
 
-AWS_PROFILE=kops kops create cluster --name=kubernetes.jcbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
+AWS_PROFILE=kops kops create cluster --name=kubernetes.jbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
 
 AWS_PROFILE=kops
 kops create cluster
---name=kubernetes.jcbrent.info
+--name=kubernetes.jbrent.info
 --state=s3://kops-state-ran0mstring1
 --zones=us-east-1a
 --node-count=3 --node-size=t2.medium --master-size=t2.micro
 --dns-zone=kubernetes.jbrent.info
 
+AWS_PROFILE=kops kops create cluster --name=kubernetes.jbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
 
-error reading cluster configuration "kubernetes.jcbrent.info":
-error reading s3://kops-state-ran0mstring1/kubernetes.jcbrent.info/config:
+ERROR:
+------
+error reading cluster configuration "kubernetes.jbrent.info":
+error reading s3://kops-state-ran0mstring1/kubernetes.jbrent.info/config:
 Unable to list AWS regions: NoCredentialProviders: no valid providers in chain
-caused by: EnvAccessKeyNotFound:
-failed to find credentials in the environment.
+caused by: EnvAccessKeyNotFound: failed to find credentials in the environment.
+SharedCredsLoad: failed to load profile, kops.
+EC2RoleRequestError: no EC2 instance role found
+caused by: RequestError: send request failed
+caused by: Get http://169.254.169.254/latest/meta-data/iam/security-credentials:
+dial tcp 169.254.169.254:80: getsockopt: network is unreachable
+
+Fixed config file and still got the same error.
+
+AWS_PROFILE=kops kops create cluster --name=kubernetes.jbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
+
+error reading cluster configuration "kubernetes.jbrent.info": error reading s3://kops-state-ran0mstring1/kubernetes.jbrent.info/config: Unable to list AWS regions: NoCredentialProviders: no valid providers in chain
+caused by: EnvAccessKeyNotFound: failed to find credentials in the environment.
 SharedCredsLoad: failed to load profile, kops.
 EC2RoleRequestError: no EC2 instance role found
 caused by: RequestError: send request failed
 caused by: Get http://169.254.169.254/latest/meta-data/iam/security-credentials: dial tcp 169.254.169.254:80: getsockopt: network is unreachable
 
-~/.aws/credentials
--bash: /home/ubuntu/.aws/credentials: Permission denied
-
-ls ~/.aws/config
-/home/ubuntu/.aws/config
-ubuntu@ubuntu-xenial:~/advanced-kubernetes-course/logging$ cat /home/ubuntu/.aws/config
-[default]
-
-Default is my profile name:
-
-AWS_PROFILE=default kops create cluster --name=kubernetes.jcbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
-I0106 01:05:53.700069    2127 create_cluster.go:439] Inferred --cloud=aws from zone "us-east-1a"
-I0106 01:05:53.701597    2127 create_cluster.go:971] Using SSH public key: /home/ubuntu/.ssh/id_rsa.pub
-I0106 01:05:54.137923    2127 subnets.go:184] Assigned CIDR 172.20.32.0/19 to subnet us-east-1a
-Previewing changes that will be made:
-etc....
-Must specify --yes to apply changes
-
-Cluster configuration has been created.
-
-Suggestions:
- * list clusters with: kops get cluster
- * edit this cluster with: kops edit cluster kubernetes.jcbrent.info
- * edit your node instance group: kops edit ig --name=kubernetes.jcbrent.info nodes
- * edit your master instance group: kops edit ig --name=kubernetes.jcbrent.info master-us-east-1a
-
-Finally configure your cluster with: kops update cluster kubernetes.jcbrent.info --yes
-
-Check the setting and agree...
-
-AWS_PROFILE=default kops update cluster kubernetes.jbrent.info -- yes --state=s3://kops-state-ran0mstring1
-
-TYPO:
-AWS_PROFILE=default kops update cluster kubernetes.jbrent.info -- yes --state=s3://kops-state-ran0mstring1
-
-Found multiple arguments which look like a cluster name
-	"kubernetes.jbrent.info" (as argument)
-	"yes" (as argument)
-	"--state=s3://kops-state-ran0mstring1" (as argument)
-
-This often happens if you specify an argument to a boolean flag without using =
-For example: use `--bastion=true` or `--bastion`, not `--bastion true`
 
 
-expected a single <clustername> to be passed as an argument
-
-FORMATTED WRONG.... see correct one below
-AWS_PROFILE=default kops update cluster kubernetes.jbrent.info --yes --state=s3://kops-state-ran0mstring1
 
 
-CORRECT
-kops update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
-
-Worked with error......
-I0106 01:12:21.438524    2155 executor.go:91] Tasks: 73 done / 73 total; 0 can run
-I0106 01:12:21.438773    2155 dns.go:153] Pre-creating DNS records
-W0106 01:12:21.678489    2155 apply_cluster.go:863] unable to pre-create DNS records
-- cluster startup may be slower:
-Error pre-creating DNS records: InvalidChangeBatch:
-RRSet with DNS name api.kubernetes.jcbrent.info. is not permitted in zone kubernetes.jbrent.info.
-	status code: 400, request id: a5a207df-f27e-11e7-bd8c-3ff3072b5c0e
-I0106 01:12:21.981198    2155 update_cluster.go:248] Exporting kubecfg for cluster
-kops has set your kubectl context to kubernetes.jcbrent.info
-
-Cluster is starting.  It should be ready in a few minutes.
-
-Suggestions:
- * validate cluster: kops validate cluster
- * list nodes: kubectl get nodes --show-labels
- * ssh to the master: ssh -i ~/.ssh/id_rsa admin@api.kubernetes.jcbrent.info
-The admin user is specific to Debian. If not using Debian please use the appropriate user based on your OS.
- * read about installing addons: https://github.com/kubernetes/kops/blob/master/docs/addons.md
-
- kops validate cluster
-Using cluster from kubectl context: kubernetes.jcbrent.info
 
 
-State Store: Required value: Please set the --state flag or export KOPS_STATE_STORE.
-A valid value follows the format s3://<bucket>.
-A s3 bucket is required to store cluster state information.
-ubuntu@ubuntu-xenial:~/advanced-kubernetes-course/logging$ kops validate cluster --state=s3://kops-state-ran0mstring1
-Using cluster from kubectl context: kubernetes.jcbrent.info
-
-Validating cluster kubernetes.jcbrent.info
-
-cannot get nodes for "kubernetes.jcbrent.info": Get https://api.kubernetes.jcbrent.info/api/v1/nodes: dial tcp 92.242.140.21:443: getsockopt: connection refused
-
-kubectl get nodes --show-labels
-Unable to connect to the server: dial tcp 92.242.140.21:443: i/o timeout
-
-ssh -i ~/.ssh/id_rsa admin@api.kubernetes.jcbrent.info
-ssh: connect to host api.kubernetes.jcbrent.info port 22: Connection timed out
-
-ISSUES:
-
-The DNS is not working ... Some info about delayed applicaiton of internal DNS discovery to the cluster
-on AWS:  https://github.com/kubernetes/kops/issues/1386
-HOWEVER: In my dashboard there appear to be two clusters/VPC ... most likely the problem.
-
-kops rolling-update cluster
-Using cluster from kubectl context: kubernetes.jcbrent.info
-State Store: Required value: Please set the --state flag or export KOPS_STATE_STORE.
-A valid value follows the format s3://<bucket>.
-A s3 bucket is required to store cluster state information.
 
 
-kops update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
 
-kops rolling-update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
+
+
+
+
+arn:aws:s3:::kops-state-ran0mstring1
+
+ec2-54-173-212-219.compute-1.amazonaws.com
+
 
 .....
