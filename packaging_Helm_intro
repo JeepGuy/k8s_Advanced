@@ -1,0 +1,32 @@
+Packaging with Helm
+===================
+- Helm is the package manager for Kubernetes
+- Helm helps you manage Kubernetes applications
+- Helm is maintained by the CNCF - The Cloud Native Computing Foundation
+  (Together with Kubernetes, fluentd, linkerd, and others)
+- Started by Google and Deis
+  Deis proveds a PaaS (Platform as a Service) on K8s
+  Bought by Microsoft in April 2017.
+  Now can be used without Deis.
+
+
+Charts
+------
+Helm uses a packaging format called charts
+ - A chart is a collection of files that describe a set of Kubernetes resources.
+ - A single chart can deploy and app, or a database.
+ - It can have dependencies, e.g. to install wordpress chart, you need a
+   mysql chart.
+
+ - Charts use templates that are typically developed by a package maintainer.
+ - They will generate yaml files that Kubernetes understands
+ - You can think of templetes as dynamic yaml files, which can contain logic
+   and variables.
+
+ Overriding values (variables) can be useful to make sure the app is configured
+ in a way you want.
+
+
+ Demo notes in next document.
+
+.....
