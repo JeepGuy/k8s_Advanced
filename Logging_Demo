@@ -585,10 +585,30 @@ http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5
 
 and you will see the kibana interface.
 
-In my case I was unable to fetch a Time Fileter field name so I could not create the first index.
+In my case I was unable to fetch a Time Filter field name so I could not create the first index.
 in Kibana
 I had to chose no timestamp pattern and found a field called:
-timeFieldName
+timeFieldName Then I had to blow away the index and use createDate.
 
-Then I was able to go to discover... 
+I got the following error when in kibana
+Time Filter field name: createDate
+This page lists every field in the * index and the field's associated core type as
+recorded by Elasticsearch. While this list allows you to view the core type of each field,
+changing field types must be done using Elasticsearch's Mapping API
+
+No matching indices found: No indices match pattern "kibana"​
+
+
+
+Error: No matching indices found: No indices match pattern "kibana"
+KbnError@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:91:23275
+IndexPatternMissingIndices@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:91:28447
+http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/kibana.bundle.js?v=15405:228:14578
+processQueue@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:38:23623
+http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:38:23900
+$digest@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:39:2364
+$apply@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:39:5044
+done@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:37:25033
+completeRequest@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:37:28710
+onload@http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/bundles/commons.bundle.js?v=15405:37:29649
 .....
