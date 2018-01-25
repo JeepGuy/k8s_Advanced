@@ -73,22 +73,522 @@ EC2RoleRequestError: no EC2 instance role found
 caused by: RequestError: send request failed
 caused by: Get http://169.254.169.254/latest/meta-data/iam/security-credentials: dial tcp 169.254.169.254:80: getsockopt: network is unreachable
 
+Fixed by deleted the incorrect cluster:
+Continuing:
 
 
 
+I0119 01:45:03.366490   13075 create_cluster.go:439] Inferred --cloud=aws from zone "us-east-1a"
+I0119 01:45:03.366576   13075 create_cluster.go:971] Using SSH public key: /home/ubuntu/.ssh/id_rsa.pub
+I0119 01:45:03.664617   13075 subnets.go:184] Assigned CIDR 172.20.32.0/19 to subnet us-east-1a
+Previewing changes that will be made:
+
+I0119 01:45:04.798874   13075 executor.go:91] Tasks: 0 done / 73 total; 31 can run
+I0119 01:45:06.361549   13075 executor.go:91] Tasks: 31 done / 73 total; 24 can run
+I0119 01:45:06.491355   13075 executor.go:91] Tasks: 55 done / 73 total; 16 can run
+I0119 01:45:06.691018   13075 executor.go:91] Tasks: 71 done / 73 total; 2 can run
+I0119 01:45:06.746187   13075 executor.go:91] Tasks: 73 done / 73 total; 0 can run
+Will create resources:
+  AutoscalingGroup/master-us-east-1a.masters.kubernetes.jbrent.info
+  	MinSize             	1
+  	MaxSize             	1
+  	Subnets             	[name:us-east-1a.kubernetes.jbrent.info]
+  	Tags                	{k8s.io/cluster-autoscaler/node-template/label/kops.k8s.io/instancegroup: master-us-east-1a, k8s.io/role/master: 1, Name: master-us-east-1a.masters.kubernetes.jbrent.info, KubernetesCluster: kubernetes.jbrent.info}
+  	LaunchConfiguration 	name:master-us-east-1a.masters.kubernetes.jbrent.info
+
+  AutoscalingGroup/nodes.kubernetes.jbrent.info
+  	MinSize             	3
+  	MaxSize             	3
+  	Subnets             	[name:us-east-1a.kubernetes.jbrent.info]
+  	Tags                	{k8s.io/cluster-autoscaler/node-template/label/kops.k8s.io/instancegroup: nodes, k8s.io/role/node: 1, Name: nodes.kubernetes.jbrent.info, KubernetesCluster: kubernetes.jbrent.info}
+  	LaunchConfiguration 	name:nodes.kubernetes.jbrent.info
+
+  DHCPOptions/kubernetes.jbrent.info
+  	DomainName          	ec2.internal
+  	DomainNameServers   	AmazonProvidedDNS
+
+  EBSVolume/a.etcd-events.kubernetes.jbrent.info
+  	AvailabilityZone    	us-east-1a
+  	VolumeType          	gp2
+  	SizeGB              	20
+  	Encrypted           	false
+  	Tags                	{k8s.io/etcd/events: a/a, k8s.io/role/master: 1, Name: a.etcd-events.kubernetes.jbrent.info, KubernetesCluster: kubernetes.jbrent.info}
+
+  EBSVolume/a.etcd-main.kubernetes.jbrent.info
+  	AvailabilityZone    	us-east-1a
+  	VolumeType          	gp2
+  	SizeGB              	20
+  	Encrypted           	false
+  	Tags                	{k8s.io/etcd/main: a/a, k8s.io/role/master: 1, Name: a.etcd-main.kubernetes.jbrent.info, KubernetesCluster: kubernetes.jbrent.info}
+
+  IAMInstanceProfile/masters.kubernetes.jbrent.info
+
+  IAMInstanceProfile/nodes.kubernetes.jbrent.info
+
+  IAMInstanceProfileRole/masters.kubernetes.jbrent.info
+  	InstanceProfile     	name:masters.kubernetes.jbrent.info id:masters.kubernetes.jbrent.info
+  	Role                	name:masters.kubernetes.jbrent.info
+
+  IAMInstanceProfileRole/nodes.kubernetes.jbrent.info
+  	InstanceProfile     	name:nodes.kubernetes.jbrent.info id:nodes.kubernetes.jbrent.info
+  	Role                	name:nodes.kubernetes.jbrent.info
+
+  IAMRole/masters.kubernetes.jbrent.info
+  	ExportWithID        	masters
+
+  IAMRole/nodes.kubernetes.jbrent.info
+  	ExportWithID        	nodes
+
+  IAMRolePolicy/masters.kubernetes.jbrent.info
+  	Role                	name:masters.kubernetes.jbrent.info
+
+  IAMRolePolicy/nodes.kubernetes.jbrent.info
+  	Role                	name:nodes.kubernetes.jbrent.info
+
+  InternetGateway/kubernetes.jbrent.info
+  	VPC                 	name:kubernetes.jbrent.info
+  	Shared              	false
+
+  Keypair/apiserver-aggregator
+  	Subject             	cn=aggregator
+  	Type                	client
+  	Signer              	name:apiserver-aggregator-ca id:cn=apiserver-aggregator-ca
+
+  Keypair/apiserver-aggregator-ca
+  	Subject             	cn=apiserver-aggregator-ca
+  	Type                	ca
+
+  Keypair/apiserver-proxy-client
+  	Subject             	cn=apiserver-proxy-client
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/ca
+  	Subject             	cn=kubernetes
+  	Type                	ca
+
+  Keypair/kops
+  	Subject             	o=system:masters,cn=kops
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/kube-controller-manager
+  	Subject             	cn=system:kube-controller-manager
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/kube-proxy
+  	Subject             	cn=system:kube-proxy
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/kube-scheduler
+  	Subject             	cn=system:kube-scheduler
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/kubecfg
+  	Subject             	o=system:masters,cn=kubecfg
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/kubelet
+  	Subject             	o=system:nodes,cn=kubelet
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/kubelet-api
+  	Subject             	cn=kubelet-api
+  	Type                	client
+  	Signer              	name:ca id:cn=kubernetes
+
+  Keypair/master
+  	Subject             	cn=kubernetes-master
+  	Type                	server
+  	AlternateNames      	[100.64.0.1, 127.0.0.1, api.internal.kubernetes.jbrent.info, api.kubernetes.jbrent.info, kubernetes, kubernetes.default, kubernetes.default.svc, kubernetes.default.svc.cluster.local]
+  	Signer              	name:ca id:cn=kubernetes
+
+  LaunchConfiguration/master-us-east-1a.masters.kubernetes.jbrent.info
+  	ImageID             	kope.io/k8s-1.8-debian-jessie-amd64-hvm-ebs-2017-12-02
+  	InstanceType        	t2.micro
+  	SSHKey              	name:kubernetes.kubernetes.jbrent.info-16:03:b5:80:17:74:70:1f:d3:4a:a9:e8:67:bc:ec:20 id:kubernetes.kubernetes.jbrent.info-16:03:b5:80:17:74:70:1f:d3:4a:a9:e8:67:bc:ec:20
+  	SecurityGroups      	[name:masters.kubernetes.jbrent.info]
+  	AssociatePublicIP   	true
+  	IAMInstanceProfile  	name:masters.kubernetes.jbrent.info id:masters.kubernetes.jbrent.info
+  	RootVolumeSize      	64
+  	RootVolumeType      	gp2
+  	SpotPrice
+
+  LaunchConfiguration/nodes.kubernetes.jbrent.info
+  	ImageID             	kope.io/k8s-1.8-debian-jessie-amd64-hvm-ebs-2017-12-02
+  	InstanceType        	t2.medium
+  	SSHKey              	name:kubernetes.kubernetes.jbrent.info-16:03:b5:80:17:74:70:1f:d3:4a:a9:e8:67:bc:ec:20 id:kubernetes.kubernetes.jbrent.info-16:03:b5:80:17:74:70:1f:d3:4a:a9:e8:67:bc:ec:20
+  	SecurityGroups      	[name:nodes.kubernetes.jbrent.info]
+  	AssociatePublicIP   	true
+  	IAMInstanceProfile  	name:nodes.kubernetes.jbrent.info id:nodes.kubernetes.jbrent.info
+  	RootVolumeSize      	128
+  	RootVolumeType      	gp2
+  	SpotPrice
+
+  ManagedFile/kubernetes.jbrent.info-addons-bootstrap
+  	Location            	addons/bootstrap-channel.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-core.addons.k8s.io
+  	Location            	addons/core.addons.k8s.io/v1.4.0.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-dns-controller.addons.k8s.io-k8s-1.6
+  	Location            	addons/dns-controller.addons.k8s.io/k8s-1.6.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-dns-controller.addons.k8s.io-pre-k8s-1.6
+  	Location            	addons/dns-controller.addons.k8s.io/pre-k8s-1.6.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-kube-dns.addons.k8s.io-k8s-1.6
+  	Location            	addons/kube-dns.addons.k8s.io/k8s-1.6.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-kube-dns.addons.k8s.io-pre-k8s-1.6
+  	Location            	addons/kube-dns.addons.k8s.io/pre-k8s-1.6.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-limit-range.addons.k8s.io
+  	Location            	addons/limit-range.addons.k8s.io/v1.5.0.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-rbac.addons.k8s.io-k8s-1.8
+  	Location            	addons/rbac.addons.k8s.io/k8s-1.8.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-storage-aws.addons.k8s.io-v1.6.0
+  	Location            	addons/storage-aws.addons.k8s.io/v1.6.0.yaml
+
+  ManagedFile/kubernetes.jbrent.info-addons-storage-aws.addons.k8s.io-v1.7.0
+  	Location            	addons/storage-aws.addons.k8s.io/v1.7.0.yaml
+
+  Route/0.0.0.0/0
+  	RouteTable          	name:kubernetes.jbrent.info
+  	CIDR                	0.0.0.0/0
+  	InternetGateway     	name:kubernetes.jbrent.info
+
+  RouteTable/kubernetes.jbrent.info
+  	VPC                 	name:kubernetes.jbrent.info
+
+  RouteTableAssociation/us-east-1a.kubernetes.jbrent.info
+  	RouteTable          	name:kubernetes.jbrent.info
+  	Subnet              	name:us-east-1a.kubernetes.jbrent.info
+
+  SSHKey/kubernetes.kubernetes.jbrent.info-16:03:b5:80:17:74:70:1f:d3:4a:a9:e8:67:bc:ec:20
+  	KeyFingerprint      	e3:4c:0b:26:c4:bd:96:ed:cf:52:14:19:8d:3d:b8:d9
+
+  Secret/admin
+
+  Secret/kube
+
+  Secret/kube-proxy
+
+  Secret/kubelet
+
+  Secret/system:controller_manager
+
+  Secret/system:dns
+
+  Secret/system:logging
+
+  Secret/system:monitoring
+
+  Secret/system:scheduler
+
+  SecurityGroup/masters.kubernetes.jbrent.info
+  	Description         	Security group for masters
+  	VPC                 	name:kubernetes.jbrent.info
+  	RemoveExtraRules    	[port=22, port=443, port=2380, port=2381, port=4001, port=4002, port=4789, port=179]
+
+  SecurityGroup/nodes.kubernetes.jbrent.info
+  	Description         	Security group for nodes
+  	VPC                 	name:kubernetes.jbrent.info
+  	RemoveExtraRules    	[port=22]
+
+  SecurityGroupRule/all-master-to-master
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	SourceGroup         	name:masters.kubernetes.jbrent.info
+
+  SecurityGroupRule/all-master-to-node
+  	SecurityGroup       	name:nodes.kubernetes.jbrent.info
+  	SourceGroup         	name:masters.kubernetes.jbrent.info
+
+  SecurityGroupRule/all-node-to-node
+  	SecurityGroup       	name:nodes.kubernetes.jbrent.info
+  	SourceGroup         	name:nodes.kubernetes.jbrent.info
+
+  SecurityGroupRule/https-external-to-master-0.0.0.0/0
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	CIDR                	0.0.0.0/0
+  	Protocol            	tcp
+  	FromPort            	443
+  	ToPort              	443
+
+  SecurityGroupRule/master-egress
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	CIDR                	0.0.0.0/0
+  	Egress              	true
+
+  SecurityGroupRule/node-egress
+  	SecurityGroup       	name:nodes.kubernetes.jbrent.info
+  	CIDR                	0.0.0.0/0
+  	Egress              	true
+
+  SecurityGroupRule/node-to-master-tcp-1-2379
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	Protocol            	tcp
+  	FromPort            	1
+  	ToPort              	2379
+  	SourceGroup         	name:nodes.kubernetes.jbrent.info
+
+  SecurityGroupRule/node-to-master-tcp-2382-4000
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	Protocol            	tcp
+  	FromPort            	2382
+  	ToPort              	4000
+  	SourceGroup         	name:nodes.kubernetes.jbrent.info
+
+  SecurityGroupRule/node-to-master-tcp-4003-65535
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	Protocol            	tcp
+  	FromPort            	4003
+  	ToPort              	65535
+  	SourceGroup         	name:nodes.kubernetes.jbrent.info
+
+  SecurityGroupRule/node-to-master-udp-1-65535
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	Protocol            	udp
+  	FromPort            	1
+  	ToPort              	65535
+  	SourceGroup         	name:nodes.kubernetes.jbrent.info
+
+  SecurityGroupRule/ssh-external-to-master-0.0.0.0/0
+  	SecurityGroup       	name:masters.kubernetes.jbrent.info
+  	CIDR                	0.0.0.0/0
+  	Protocol            	tcp
+  	FromPort            	22
+  	ToPort              	22
+
+  SecurityGroupRule/ssh-external-to-node-0.0.0.0/0
+  	SecurityGroup       	name:nodes.kubernetes.jbrent.info
+  	CIDR                	0.0.0.0/0
+  	Protocol            	tcp
+  	FromPort            	22
+  	ToPort              	22
+
+  Subnet/us-east-1a.kubernetes.jbrent.info
+  	VPC                 	name:kubernetes.jbrent.info
+  	AvailabilityZone    	us-east-1a
+  	CIDR                	172.20.32.0/19
+  	Shared              	false
+  	Tags                	{kubernetes.io/role/elb: 1, Name: us-east-1a.kubernetes.jbrent.info, KubernetesCluster: kubernetes.jbrent.info, kubernetes.io/cluster/kubernetes.jbrent.info: owned}
+
+  VPC/kubernetes.jbrent.info
+  	CIDR                	172.20.0.0/16
+  	EnableDNSHostnames  	true
+  	EnableDNSSupport    	true
+  	Shared              	false
+  	Tags                	{Name: kubernetes.jbrent.info, KubernetesCluster: kubernetes.jbrent.info, kubernetes.io/cluster/kubernetes.jbrent.info: owned}
+
+  VPCDHCPOptionsAssociation/kubernetes.jbrent.info
+  	VPC                 	name:kubernetes.jbrent.info
+  	DHCPOptions         	name:kubernetes.jbrent.info
+
+Must specify --yes to apply changes
+
+Cluster configuration has been created.
+
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster kubernetes.jbrent.info
+ * edit your node instance group: kops edit ig --name=kubernetes.jbrent.info nodes
+ * edit your master instance group: kops edit ig --name=kubernetes.jbrent.info master-us-east-1a
+
+Finally configure your cluster with: kops update cluster kubernetes.jbrent.info --yes
 
 
+IF YOU AGREE WITH THE CONFIGURATION THEN TYPE:
+--- THIS COMMAND will launch the cluster:
+
+kops update cluster kubernetes.jbrent.info --yes --state=s3://kops-state-ran0mstring1
+
+WORKED !!!
+
+I0119 01:54:09.710608   13082 executor.go:91] Tasks: 0 done / 73 total; 31 can run
+I0119 01:54:10.144327   13082 vfs_castore.go:430] Issuing new certificate: "apiserver-aggregator-ca"
+I0119 01:54:11.743644   13082 vfs_castore.go:430] Issuing new certificate: "ca"
+I0119 01:54:11.861540   13082 executor.go:91] Tasks: 31 done / 73 total; 24 can run
+I0119 01:54:12.435025   13082 vfs_castore.go:430] Issuing new certificate: "apiserver-aggregator"
+I0119 01:54:12.441464   13082 vfs_castore.go:430] Issuing new certificate: "kops"
+I0119 01:54:12.515199   13082 vfs_castore.go:430] Issuing new certificate: "kubecfg"
+I0119 01:54:12.546383   13082 vfs_castore.go:430] Issuing new certificate: "apiserver-proxy-client"
+I0119 01:54:12.792321   13082 vfs_castore.go:430] Issuing new certificate: "kube-proxy"
+I0119 01:54:12.955804   13082 vfs_castore.go:430] Issuing new certificate: "kube-scheduler"
+I0119 01:54:13.055849   13082 vfs_castore.go:430] Issuing new certificate: "kubelet-api"
+I0119 01:54:13.122344   13082 vfs_castore.go:430] Issuing new certificate: "master"
+I0119 01:54:13.126797   13082 vfs_castore.go:430] Issuing new certificate: "kube-controller-manager"
+I0119 01:54:13.389119   13082 vfs_castore.go:430] Issuing new certificate: "kubelet"
+I0119 01:54:13.619781   13082 executor.go:91] Tasks: 55 done / 73 total; 16 can run
+I0119 01:54:13.923111   13082 launchconfiguration.go:333] waiting for IAM instance profile "masters.kubernetes.jbrent.info" to be ready
+I0119 01:54:13.931601   13082 launchconfiguration.go:333] waiting for IAM instance profile "nodes.kubernetes.jbrent.info" to be ready
+I0119 01:54:24.291558   13082 executor.go:91] Tasks: 71 done / 73 total; 2 can run
+I0119 01:54:24.725821   13082 executor.go:91] Tasks: 73 done / 73 total; 0 can run
+I0119 01:54:24.726708   13082 dns.go:153] Pre-creating DNS records
+I0119 01:54:25.108630   13082 update_cluster.go:248] Exporting kubecfg for cluster
+kops has set your kubectl context to kubernetes.jbrent.info
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to the master: ssh -i ~/.ssh/id_rsa admin@api.kubernetes.jbrent.info
+The admin user is specific to Debian. If not using Debian please use the appropriate
+user based on your OS.
+ * read about installing addons:
+ https://github.com/kubernetes/kops/blob/master/docs/addons.md
+
+check kops: kops version
+
+kops version
+Version 1.8.0 (git-5099bc5)
+
+kubectl get nodes
+NAME                            STATUS    ROLES     AGE       VERSION
+ip-172-20-32-84.ec2.internal    Ready     master    20m       v1.8.4
+ip-172-20-33-253.ec2.internal   Ready     node      18m       v1.8.4
+ip-172-20-35-83.ec2.internal    Ready     node      18m       v1.8.4
+ip-172-20-49-66.ec2.internal    Ready     node      15m       v1.8.4
+
+The cluster is set up correctly...
+
+Now you must label the nodes:
+
+The efficient way is:
+
+for i in 'kubectl get node |cut -d ' ' -f 1 |grep internal' ; do kubectl label nodes ${i} beta.kubernetes.io/fluentd-dns-ready=true ; done
+
+Doesn't work on my MAC:  Error: unknown shorthand flag: 'd' in -d
+ -- typing this in shows that the single quote is a special character but it still doesn't work.
+
+ error: the path "1" does not exist
+
+Manually add the labels:
+------------------------
+kubectl get nodes
+NAME                            STATUS    ROLES     AGE       VERSION
+ip-172-20-32-84.ec2.internal    Ready     master    5d        v1.8.4
+ip-172-20-33-253.ec2.internal   Ready     node      5d        v1.8.4
+ip-172-20-35-83.ec2.internal    Ready     node      5d        v1.8.4
+ip-172-20-49-66.ec2.internal    Ready     node      5d        v1.8.4
+
+kubectl label nodes <your-node-name> disktype=ssd
+
+kubectl label nodes ip-172-20-32-84.ec2.internal  fluentd-ds-ready=true
+kubectl label nodes ip-172-20-33-253.ec2.internal   fluentd-ds-ready=true
+kubectl label nodes ip-172-20-35-83.ec2.internal  fluentd-ds-ready=true
+kubectl label nodes ip-172-20-49-66.ec2.internal  fluentd-ds-ready=true
+
+Confirm that it is done correctly
+---------------------------------
+
+kubectl get nodes --show-lables
+
+kubectl get nodes --show-labels
+NAME                            STATUS    ROLES     AGE       VERSION   LABELS
+ip-172-20-32-84.ec2.internal    Ready     master    5d        v1.8.4    beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=t2.micro,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-east-1,failure-domain.beta.kubernetes.io/zone=us-east-1a,fluentd-ds-ready=true,kops.k8s.io/instancegroup=master-us-east-1a,kubernetes.io/hostname=ip-172-20-32-84.ec2.internal,kubernetes.io/role=master,node-role.kubernetes.io/master=
+ip-172-20-33-253.ec2.internal   Ready     node      5d        v1.8.4    beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=t2.medium,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-east-1,failure-domain.beta.kubernetes.io/zone=us-east-1a,fluentd-ds-ready=true,kops.k8s.io/instancegroup=nodes,kubernetes.io/hostname=ip-172-20-33-253.ec2.internal,kubernetes.io/role=node,node-role.kubernetes.io/node=
+ip-172-20-35-83.ec2.internal    Ready     node      5d        v1.8.4    beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=t2.medium,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-east-1,failure-domain.beta.kubernetes.io/zone=us-east-1a,fluentd-ds-ready=true,kops.k8s.io/instancegroup=nodes,kubernetes.io/hostname=ip-172-20-35-83.ec2.internal,kubernetes.io/role=node,node-role.kubernetes.io/node=
+ip-172-20-49-66.ec2.internal    Ready     node      5d        v1.8.4    beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=t2.medium,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-east-1,failure-domain.beta.kubernetes.io/zone=us-east-1a,fluentd-ds-ready=true,kops.k8s.io/instancegroup=nodes,kubernetes.io/hostname=ip-172-20-49-66.ec2.internal,kubernetes.io/role=node,node-role.kubernetes.io/node=
 
 
+Modifications to the set up of the files for the AWS region etc.
+----------------------------------------------------------------
+
+Modify storage.yaml for the parameter: zone
+in my cast is us east 1a    aka: --zones=us-east-1a
+
+Now we can deploy.
+
+kubectl -f create .    # this whole directory.
+
+kubectl create -f .
+service "elasticsearch-logging" created
+serviceaccount "elasticsearch-logging" created
+clusterrole "elasticsearch-logging" created
+clusterrolebinding "elasticsearch-logging" created
+statefulset "elasticsearch-logging" created
+configmap "fluentd-es-config-v0.1.0" created
+serviceaccount "fluentd-es" created
+clusterrole "fluentd-es" created
+clusterrolebinding "fluentd-es" created
+daemonset "fluentd-es-v2.0.1" created
+deployment "kibana-logging" created
+service "kibana-logging" created
+storageclass "standard" created
+
+Being created ---------
+
+kubectl get pods --namespace=kube-system
+NAME                                                   READY     STATUS    RESTARTS   AGE
+dns-controller-f75fbb996-pr6lc                         1/1       Running   0          5d
+elasticsearch-logging-0                                1/1       Running   0          1m
+elasticsearch-logging-1                                1/1       Running   0          54s
+etcd-server-events-ip-172-20-32-84.ec2.internal        1/1       Running   0          5d
+etcd-server-ip-172-20-32-84.ec2.internal               1/1       Running   0          5d
+kibana-logging-78867c787f-nlxl6                        1/1       Running   0          1m
+kube-apiserver-ip-172-20-32-84.ec2.internal            1/1       Running   1          5d
+kube-controller-manager-ip-172-20-32-84.ec2.internal   1/1       Running   0          5d
+kube-dns-7f56f9f8c7-csqpv                              3/3       Running   0          5d
+kube-dns-7f56f9f8c7-qs9mv                              3/3       Running   0          5d
+kube-dns-autoscaler-f4c47db64-sjgxz                    1/1       Running   0          5d
+kube-proxy-ip-172-20-32-84.ec2.internal                1/1       Running   0          5d
+kube-proxy-ip-172-20-33-253.ec2.internal               1/1       Running   0          5d
+kube-proxy-ip-172-20-35-83.ec2.internal                1/1       Running   0          5d
+kube-proxy-ip-172-20-49-66.ec2.internal                1/1       Running   0          5d
+kube-scheduler-ip-172-20-32-84.ec2.internal            1/1       Running   0          5d
+
+Successful .........................
+
+notice two pods for elasticsearch... statefulset adds the ordinal to the name.
+elasticsearch-logging-0
+elasticsearch-logging-1
+
+kubectl get pv --namespace=kube-system
 
 
+The claims volumes are attached to elasticsearch correctly:
 
+kubectl get pv --namespace=kube-system
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                                            STORAGECLASS   REASON    AGE
+pvc-d1b74705-016c-11e8-9200-12e329cdc29e   8Gi        RWO            Delete           Bound     kube-system/es-storage-elasticsearch-logging-0   standard                 4m
+pvc-ef3bfd81-016c-11e8-9200-12e329cdc29e   8Gi        RWO            Delete           Bound     kube-system/es-storage-elasticsearch-logging-1   standard                 3m
 
+Now go to AWS to look at the load balancer...
 
+The nodes are in EC2
 
-arn:aws:s3:::kops-state-ran0mstring1
+The load balancer is there...
 
-ec2-54-173-212-219.compute-1.amazonaws.com
+The hostname is the DNS name (A record)
+- you can create a Route53 record
+kibana.yourcluster.com to point to this load balancer DNS name.
 
+You must edit the security group (scroll to the bottom of the lower pane in the page)
+ and you only allow your own IP address
 
+ sg-11869c65
+k8s-elb-ad1e8a049016c11e8920012e329cdc29
+Security group for Kubernetes ELB ad1e8a049016c11e8920012e329cdc29 (kube-system/
+
+copy the DNS record and add the port: 5601 for kibana
+
+http://ad1e8a049016c11e8920012e329cdc29-2036402624.us-east-1.elb.amazonaws.com:5601/app/kibana#/management/kibana/index?_g=()
+
+and you will see the kibana interface.
+
+In my case I was unable to fetch a Time Fileter field name so I could not create the first index.
+in Kibana
+I had to chose no timestamp pattern and found a field called:
+timeFieldName
+
+Then I was able to go to discover... 
 .....

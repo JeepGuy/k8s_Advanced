@@ -120,3 +120,141 @@ A s3 bucket is required to store cluster state information.
 kops update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
 
 kops rolling-update cluster kubernetes.jcbrent.info --yes --state=s3://kops-state-ran0mstring1
+
+
+kops create cluster --name=kubernetes.jbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
+
+
+kops delete cluster --name=kubernetes.jbrent.info --state=s3://kops-state-ran0mstring1
+
+ERROR was a typo in the create command (added a character to the domain name) ...
+Had to delete the inbound rule sets in the incorrect security groups and
+then the groups themselves in order to restore the AWS account so that DNS would work.
+
+FROM AMAZON SUPPORT:
+Also the reason why the security group will not delete is that they are some rule in each security group referencing another security group,
+
+You will have to first delete the following inbound rule in Security Group sg-f967cb8d masters.kubernetes.jcbrent.info  nd make sure thr SG is not attached to any instance before you can delete the SG itself
+
+	TCP 	1 - 2379 	    sg-7964c80d
+ 	TCP 	2382 - 4000 	sg-7964c80d
+	TCP 	4003 - 65535 	sg-7964c80d
+	UDP 	1 - 65535 	    sg-7964c80d
+ 	ALL 		            sg-f967cb8d
+
+And also delete the following inbound rule in SG sg-f967cb8d
+
+ALL 		sg-7964c80d
+ALL 		sg-f967cb8d
+
+
+It appears that you've used kops to launch this Cluster and for that reason I would
+recommend using the delete command as listed here
+https://github.com/kubernetes/kops/blob/master/docs/commands.md
+which should delete all the Resources that the cluster created
+
+See full email below:
+
+Hi Jim,
+
+Thanks for the update
+
+From the Details you have provided  checking what’s causing the error "NoCredentialProviders: no valid providers in chain." The error seems like the Profile "kops"  you are calling does not exist or is not available on the instance for that user for the "kops" application to use.  Seems you have only configured  the default profile on your instance in which you have provided the "kops user " credentials, So running the command without the setting the profile should work.
+
+kops create cluster --name=kubernetes.jbrent.info --state=s3://kops-state-ran0mstring1 --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kubernetes.jbrent.info
+
+if you would want to create a named profile called "kops" kindly follow the documentation https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html
+
+To see the profiles available for your instance you can run the command
+
+$ cat ~/.aws/credentials
+
+you will get something similar in this case the only profile is the default profile. "default"
+[default]
+aws_access_key_id = XXXXXXXXXXXXXXXXXXXX
+aws_secret_access_key = XXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+According to the github documentation: You should record the SecretAccessKey and AccessKeyID in the returned JSON output, and then use them below:
+
+# configure the aws client to use your new IAM user
+aws configure           # Use your new access and secret key here
+aws iam list-users      # you should see a list of all your IAM users here
+
+# Because "aws configure" doesn't export these vars for kops to use, we export them now
+export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+
+what I will advise is that you create an IAM role with the appropriate permission policy and  attach to the role to the instance you are using for configuration: https://aws.amazon.com/blogs/security/easily-replace-or-attach-an-iam-role-to-an-existing-ec2-instance-by-using-the-ec2-console/ this way you will not require access key or secret key in the instance anymore.as the go AWS SDK will use the IAM role attached to the instance.
+
+Also the reason why the security group will not delete is that they are some rule in each security group referencing another security group,
+
+You will have to first delete the following inbound rule in Security Group sg-f967cb8d masters.kubernetes.jcbrent.info  nd make sure thr SG is not attached to any instance before you can delete the SG itself
+
+	TCP 	1 - 2379 	    sg-7964c80d
+ 	TCP 	2382 - 4000 	sg-7964c80d
+	TCP 	4003 - 65535 	sg-7964c80d
+	UDP 	1 - 65535 	    sg-7964c80d
+ 	ALL 		            sg-f967cb8d
+
+And also delete the following inbound rule in SG sg-f967cb8d
+
+ALL 		sg-7964c80d
+ALL 		sg-f967cb8d
+
+
+It appears that you've used kops to launch this Cluster and for that reason I would recommend using the delete command as listed here   https://github.com/kubernetes/kops/blob/master/docs/commands.md which should delete all the Resources that the cluster created but if for some reason this doesn't work, I would recommend creating a github issue here: https://github.com/kubernetes/kops/issues which is within the same repository and they should be able to help you out in working out why the deletion may have failed.
+
+
+In an attempt to understand Kubernetes cluster, I replicated the installation steps proposed by Kubernetes Getting Started documentation https://github.com/kubernetes/kops/blob/master/docs/aws.md and reached the end of the guide with a Kubernetes cluster successfully created and also deleted at the end.
+
+Install kops
+Install kubectl
+
+
+In order to correctly prepare your AWS account for kops, we require you to install the AWS CLI tools, and have API credentials for an account that has the permissions to create a new IAM account for kops later in the guide.
+
+Once you've installed the AWS CLI tools and have correctly setup your system to use the official AWS methods of registering security credentials as defined here we'll be ready to run kops, as it uses the Go AWS SDK.
+
+Setup IAM user : https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html
+
+
+kops create cluster --name=myfirscluster.kops.testdomain.com --state=ses=eu-west-1c --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=kops.testdomain.com
+
+
+ kops update cluster ${NAME} --yes --name=myfirscluster.kops.testdomain.com
+
+
+# kubectl get nodes
+Unable to connect to the server: dial tcp 203.0.113.123:443: i/o timeout
+
+ Then after a few minutes, I tried to get information from my nodes again and successfully received it:
+
+ kubectl get nodes
+NAME                                          STATUS     ROLES     AGE       VERSION
+ip-172-20-36-40.eu-west-1.compute.internal    NotReady   node      6s        v1.7.11
+ip-172-20-54-156.eu-west-1.compute.internal   Ready      master    1m        v1.7.11
+
+
+I was able to delete the entire cluster using the command
+
+kops delete cluster -name=myfirscluster.kops.testdomain.com ${NAME} --yes -
+
+Note that this command is very destructive, and will delete your cluster and everything contained within it!
+
+I hope you find this information helpful .Please let me know if you have any additional questions or need further clarification, and I would be happy to assist!
+
+
+Best regards,
+
+Abiola B.
+Amazon Web Services
+
+Check out the AWS Support Knowledge Center, a knowledge base of articles and videos that answer customer questions about AWS services: https://aws.amazon.com/premiumsupport/knowledge-center/?icmpid=support_email_category
+
+We value your feedback. Please rate my response using the link below.
+===================================================
+
+To contact us again about this case, please return to the AWS Support Center using the following URL:
+
+https://console.aws.amazon.com/support/home#/case/?displayId=4787319231&language=en
