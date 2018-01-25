@@ -272,8 +272,7 @@ Will create resources:
   	RouteTable          	name:kubernetes.jbrent.info
   	Subnet              	name:us-east-1a.kubernetes.jbrent.info
 
-  SSHKey/kubernetes.kubernetes.jbrent.info-16:03:b5:80:17:74:70:1f:d3:4a:a9:e8:67:bc:ec:20
-  	KeyFingerprint      	e3:4c:0b:26:c4:bd:96:ed:cf:52:14:19:8d:3d:b8:d9
+  SSHKey9
 
   Secret/admin
 
