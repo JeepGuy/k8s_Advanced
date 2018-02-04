@@ -225,7 +225,16 @@ ip-172-20-40-253.ec2.internal   Ready     node      12h       v1.8.6    beta.kub
 ip-172-20-42-22.ec2.internal    Ready     master    13h       v1.8.6    beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=t2.micro,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-east-1,failure-domain.beta.kubernetes.io/zone=us-east-1a,fluentd-ds-ready=true,kops.k8s.io/instancegroup=master-us-east-1a,kubernetes.io/hostname=ip-172-20-42-22.ec2.internal,kubernetes.io/role=master,node-role.kubernetes.io/master=
 ip-172-20-51-73.ec2.internal    Ready     node      12h       v1.8.6    beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=t2.medium,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-east-1,failure-domain.beta.kubernetes.io/zone=us-east-1a,fluentd-ds-ready=true,kops.k8s.io/instancegroup=nodes,kubernetes.io/hostname=ip-172-20-51-73.ec2.internal,kubernetes.io/role=node,node-role.kubernetes.io/node=
 
-Done.
+correct label: beta.kubernetes.io/fluentd-ds-ready=true
+
+
+kubectl label node <nodename> <labelname>-
+
+kubectl label nodes   ip-172-20-36-178.ec2.internal  beta.kubernetes.io/fluentd-ds-ready=true
+kubectl label nodes   ip-172-20-40-253.ec2.internal beta.kubernetes.io/fluentd-ds-ready=true
+kubectl label nodes   ip-172-20-42-22.ec2.internal  beta.kubernetes.io/fluentd-ds-ready=true
+kubectl label nodes   ip-172-20-51-73.ec2.internal  beta.kubernetes.io/fluentd-ds-ready=true
+
 
 Modifications to the set up of the files for the AWS region etc.
 ----------------------------------------------------------------
@@ -374,7 +383,9 @@ No matching indices found: No indices match pattern "kibana"​
 Error: No matching indices found: No indices match pattern "kibana"
 KbnError@http://ad1e016
 
-I blew this all away and completely rebuilt the deployment over several attempts wihtout success.
+In this particular case I had to manually label the nodes and didn't label them with the prefix in error.
+ - once I added the correct label I delete the deployment files
+ - and then redeployed the files the Fluentd pods were correctly created and this all worked.
 
 
 
@@ -383,6 +394,11 @@ I blew this all away and completely rebuilt the deployment over several attempts
 
 
 kops delete cluster --name kubernetes.newtech.academy --state=s3://kops-state-cccccccc
+kops create cluster --name=$NAME  --state=$KOPS_STATE_STORE   --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.micro --dns-zone=$DNS_ZONE
+
+kops delete cluster --name=$NAME  --state=$KOPS_STATE_STORE
+(remember this must be done in the same terminal session you installed or you have to reset the vars)
+
 
 
 VolumeType          	gp2  =  EBS General Purpose SSD (gp2)*
