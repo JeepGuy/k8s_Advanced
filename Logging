@@ -60,8 +60,29 @@ for i in 'kubectl get node   ==for index "i" in each of the stdout of kubectl ge
 | cut -d' ' -f 1              == give me the first part of the stdout
 | grep internal' ;            == grep on the internal part of the hostname
 do kubectl label nodes ${i} beta.kubernetes.io/fluentd-ds-ready=true;
-        == label each node using kubectl with the phrase   fluentd-ds-ready
+        == label each node using kubectl with the phrase   fluentd-ds-ready=true
 done                          == finish script.
+
+This didn't work for me:
+ERRORS:
+error: unknown shorthand flag: 'd' in -d
+error: the path "1" does not exist
+
+manually label the nodes:
+kubectl label nodes <node-name> <label-key>=<label-value>
+
+ip-172-20-36-178.ec2.internal   Ready     node      12h       v1.8.6
+ip-172-20-40-253.ec2.internal   Ready     node      12h       v1.8.6
+ip-172-20-42-22.ec2.internal    Ready     master    12h       v1.8.6
+ip-172-20-51-73.ec2.internal    Ready     node      12h       v1.8.6
+
+kubectl label nodes   ip-172-20-36-178.ec2.internal  fluentd-ds-ready=true
+kubectl label nodes   ip-172-20-40-253.ec2.internal fluentd-ds-ready=true
+kubectl label nodes   ip-172-20-42-22.ec2.internal  fluentd-ds-ready=true
+kubectl label nodes   ip-172-20-51-73.ec2.internal  fluentd-ds-ready=true
+
+Done.
+
 
 
 
