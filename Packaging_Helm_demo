@@ -1,3 +1,48 @@
+First Install HELM:
+
 Download and install Helm from website:
+
+WARNING You must get the correct version of Helm for your version of Kubernetes.
+For instance: The current Helm version is v2.8...
+It works for Kubernetes v1.9...
+e.g.  Helm 2.7.0 provides Kubernetes 1.8 support.
+Also if you are connecting to an existing Kubernetes Cluster you must determine which
+version of helm was used to install Tiller on your existing cluster
+(it should be mapped the K8s Version you are using).
+
+
+wget https://kubernetes-helm.storage.googleapis.com/helm-v2.8.0-linux-amd64.tar.gz
+
+helm-v2.8.0-linux-amd64.tar.gz  100%[=====================================================>]  14.26M  10.9MB/s    in 1.3s
+
+2018-02-06 02:25:38 (10.9 MB/s) - ‘helm-v2.8.0-linux-amd64.tar.gz’ saved [14957224/14957224]
+
+
 Extract and install
+
+tar -xvf helm-v2.8.0-linux-amd64.tar.gz
+
+linux-amd64/
+linux-amd64/README.md
+linux-amd64/helm
+linux-amd64/LICENSE
+
 Move the binary to the /usr/local/bin
+
+sudo mv linux-amd64/helm /usr/local/bin
+
+cat README.md
+
+# helm mysql package
+
+Download helm first from https://github.com/kubernetes/helm
+
+Initialize helm:
+
+helm init
+
+To install mysql, enter:
+
+helm install --name my-mysql --set mysqlRootPassword=secretpassword,mysqlUser=my-user,mysqlPassword=my-password,mysqlDatabase=my-database stable/mysql
+####################################################################
+Must install cluster first:
