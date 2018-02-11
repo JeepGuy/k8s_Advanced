@@ -1,0 +1,31 @@
+Authentication using a proxy
+
+Another way to handle authentication is to use a proxy
+
+Which means you handle the authentication yourself
+
+You write your own authentication mechanism and provide the username,
+and groups to the kubernetes API once the user is authenticated.
+
+Proxy set up steps:
+
+The proxy needs a client certificate signed by the certificate authority that is
+passed to the api server using
+ --requestheader-client-ca-file
+
+ The proxy needs to handle the authentication (a form, basic auth, or another mechism)
+
+ Once the user is authenticated the proxy needs to forward the request to the
+ k8s API server and send a HTTP header with the login.
+
+ Auth Proxy
+ ----------
+
+ This login http header is determined by a flag passed to the API server, e.g.
+    --requestheader-sername-headers=X-Remote-User
+- In this examplem the proxy needs to set the X-Remote_User after authentication
+
+    -- requestheader-group-headers=X-Remote-Group can be used as an argument to set the group header.
+
+ --requestheader-extra-headers-prefix=X-Remote-Extra - allows you to set extra
+   headers with extra information about the user.
