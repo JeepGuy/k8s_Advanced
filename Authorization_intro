@@ -1,0 +1,63 @@
+Authorization
+
+- After authentication - authorization controls what the user can do, where does
+the user have access to
+- The access controls are implemented on the API Level (kube-apiserver)
+- When the API reqeust comes in (e.g. when you enter kubectl get nodes),
+it will be checked to see whether you have access to execute this command.
+
+Multiple authroization modules available:
+- Node: a special purpose authorization mode that authorizes API requests
+  made by kubelets
+- ABAC: attribute-based access control
+  - Access rights are controlled by policies that combine attributes
+  - e.g. user "alice: can do anything in a namespace "marketing"
+  - ABAC does not allow very granular permission control
+
+- RBAC: Role based access control
+  - Regulates access using roles
+  - Allows admins to dynamically configrue permission policies
+  - Beta since k8s 1.6 - stable in 1.8
+
+- Webhook: sends authorization request to an external REST intereface
+  -The option if you want to write your own authorization server
+  - You can parse the incoming payload (which is JSON) and reply with access
+    granted or access denied.
+
+To enable an authorization mode:
+================================
+ - You need to pass
+    ---authorization-mode=XYZ to the API Server at startup.
+  which is the kube apiserver
+
+  I.e. for RBAC
+   --authroization-mode=RBAC
+
+  KOPS you can create a cluster with the flag --authorization
+   By default (when not specifying the flag), you are allowing everything
+   = the same as AlwaysAllow
+     Flag:  --AlwaysAllow
+
+  THIS MIGHT CHANGE INT HE FUTURE = when RBAC becomes stable.
+
+When specifying --authorization RBAC, a cluster will be created using RBAC.
+
+If you set up the cluster with KOPS you can edit the cluster with:
+
+kubeAPIServer:
+  authorizationMode: RBAC
+
+If using minikube you can add a parameter when starting minikube.
+ minikube start --extra-config=apiserver.Authorization.Mode=RBAC
+
+If you are using another tool to set up the cluster refer to those docs.
+
+If you set up the system manually you'll have to look at the boot scripts
+ e.g. systemd
+ That is the place where the argument lives authorization=brac (or equivalent)
+
+
+
+
+
+......
