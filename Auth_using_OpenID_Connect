@@ -1,4 +1,6 @@
 Authentication using OpenID
+OpenID Connect (OIDC) is a protocol to verify users identities and get user profile information.
+Enables devices to verify identities based on authentication performed by an authentication server.
 
 Using OpenID Connect Tokens
 - OpenID Connect is built on top of OAuth2
@@ -28,3 +30,22 @@ In the demo - to make this easier - create a reverse proxy that can authenticate
 you using OpenID Connect and it will pass your token to the UI.
 
 See sequence diagram: Auth_using_OpenID_connect_diagram.pdf
+
+Demo:
+
+General notes... Did not complete the lab it does not apply to my situation.
+
+Steps:
+
+1. Set up Identity Provider (in this case auth0 account)
+2. Create a client for K8s.
+3. Step cluster with oidc (OpenID Connect) using kops edit
+4. Deploy authentication server (for UI Proxy + to hand out bearer tokens)
+ - adds token into the HTTP header to allow access otherwise you would have to
+   add the token to the header manually.
+ - Change variables to match quth0
+5. Create a DNS Record for the auth server
+6. Then log into the WebUI (Dashboard) through the authentication server.
+7. Create auth0 secret which needs to be base64 encoded.
+
+...
