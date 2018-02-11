@@ -1,6 +1,9 @@
 RBAC Authorization
 =====================
 
+YOU MUST FIRST SET UP AUTHENTICATION IN ORDER TO USE AUTHORIZATION
+******************************************************************
+
 Add RBAC Resources with kubectl to grant permissions
   - First describe them in yaml format, then apply them to the cluster
 
