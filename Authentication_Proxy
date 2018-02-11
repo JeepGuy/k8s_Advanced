@@ -13,7 +13,7 @@ The proxy needs a client certificate signed by the certificate authority that is
 passed to the api server using
  --requestheader-client-ca-file
 
- The proxy needs to handle the authentication (a form, basic auth, or another mechism)
+ The proxy needs to handle the authentication (a form, basic auth, or another mechanism)
 
  Once the user is authenticated the proxy needs to forward the request to the
  k8s API server and send a HTTP header with the login.
