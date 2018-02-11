@@ -1,0 +1,35 @@
+Authentication Basic HTTP
+
+By default x509 certificates are used to authenticate yourself to the Kubernetes api-server.
+
+These certificates were issued when your cluster was setup for the first time.
+
+ - if you are using minikube or kops, this was done for you.
+ - In the first k8s course it has how to create new users by generating new
+ certificates signing them with the Certificate Authority that is used by Kubernetes.
+
+Alternatives:
+
+K8s API server is baed on HTTP so one of the options is use basic HTTP Basic Authentication.
+
+HTTP Basic Authentication ony requries sending a username and possword to teh API server.
+ - Simple to do, it is less secure and is difficult to maintain within K8s.
+
+ To enable - use a static password file on the K8s Master.
+ This path needs to be passed to the apiserver as an argument;
+
+  --basic-auth-file=/path/to/somefile
+
+  Format:
+
+  password,user,uid,"group1,group2,group3"
+
+  Downside:
+  - Supported as a convenience while the K8s team is working on making the more
+  secure methods easier to use.
+
+  To add a user or change the password, the apiserver needs to be restarted.
+
+  Most tools don't support basic auth.
+
+  
