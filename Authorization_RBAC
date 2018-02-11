@@ -1,0 +1,81 @@
+RBAC Authorization
+=====================
+
+Add RBAC Resources with kubectl to grant permissions
+  - First describe them in yaml format, then apply them to the cluster
+
+Define a role, then you can assign usesrs/groups to that role.
+
+You can create roles limited to a namespace, or you can create roles where the access
+applies applices to all namespaces.
+
+Different kinds of resources are:
+ - Role (single namespace) verse ClusterRol (cluster-wide)
+ - RoleBinding (single namespace) ad ClusterRoleBinding (cluster-wide)
+
+RBAC Role Granting read access to pods (not secrets) within default namespace
+-------------------------------------------------------------------------
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list", ] #  other verbs "create", "update", "patch", "delete"
+
+RBAC Cluster role (same role with secrets) spans all namespaces
+-------------------------------
+
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  # namespace: default ====== eliminate for a cluster role
+  name: pod-reader-clusterwide
+rules:
+- apiGroups: [""]
+  resources: ["pods", "secrets"]
+  verbs: ["get", "watch", "list", ] # other verbs "create", "update", "patch", "delete"
+
+ASSIGN users to the newly created namespace role
+===============================================
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: bob
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+   kind: Role
+   name: pod-reader
+   apiGroup: rbac.authorization.k8s.io
+
+
+   ASSIGN users to the newly created cluster-wide role
+   ===============================================
+USE ClusterRoleBinding
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+ name: read-pods
+ namespace: default
+subjects:
+- kind: User
+ name: bob
+ apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader-clusterside
+  apiGroup: rbac.authorization.k8s.io
+
+
+
+.....
