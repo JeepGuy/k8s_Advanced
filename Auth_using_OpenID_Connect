@@ -1,0 +1,30 @@
+Authentication using OpenID
+
+Using OpenID Connect Tokens
+- OpenID Connect is built on top of OAuth2
+- It allows you to securely authenticate and ten receive an ID Token
+- This ID Token can be verified whether it really originated from the authentication
+  server, because it is signed using HMAC, SHA256 or RSA.
+   (Signing algorithm or Encryption algorithm.)
+
+This is a server that is outside of Kubernetes - a server that you set up yourself.
+ - It gives k8s a token and then k8s can validate whether it is valid and
+   really came from the authentication server.
+
+The ID Token is JSON Web Token (JWT)
+ - JWT contains known fields like username and optionally groups.
+
+Once the token is obtained it can be used as a credential to authenticate to the
+apiserver
+ - You can pass --token=<your_token> when authenticating kubectl commands
+   or you can put it in your configuration file.
+Kubectl can also autoatically renew your token_id when it expires.
+ - This doesn't work will all identity providers.
+
+ Using this token you can authenticate to the K8s UI (web ui)
+  - which is the apiserver.
+
+In the demo - to make this easier - create a reverse proxy that can authenticate
+you using OpenID Connect and it will pass your token to the UI.
+
+See sequence diagram: Auth_using_OpenID_connect_diagram.pdf
