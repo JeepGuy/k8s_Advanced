@@ -44,13 +44,7 @@ kops create cluster --name=xxx--state=s3://kops-state-xxx --zones=us-east-1a --n
 
 
 Command required attributes.
-AWS_PROFILE=kops  (I didn't need the AWS_PROFILE name)
-kops create cluster
---name=
---state=s3:
---zones=
---node-count=3 --node-size=t2.medium --master-size=t2.micro
---dns-zone=
+DNS_ZONE
 
 FIRST ATTEMPT:
 
