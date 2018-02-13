@@ -46,6 +46,16 @@ Canary - Analysis - a different environment that gets some traffic
 
 READ MORE:    spinker.io/concepts
 
+Terminology:
+ Different than K8s.
+
+ - Account: maps to a credential able to authenticate against Kubernetes, and
+   docker registries where your images are stored.
+ - Instance: maps to a k8s pod.
+ - Server Group: Maps to a Replica set
+ - Cluster: a Spinnaker deployment on k8s.
+    Spinnaker uses its own orchestration and is different from the Deployment k8s.
+ - Load Balancer: maps to a K8s service.
 
  -
 
