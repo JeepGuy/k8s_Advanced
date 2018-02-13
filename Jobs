@@ -1,0 +1,56 @@
+Jobs
+
+Schedule pods as Jobs rather than with a ReplicationController / ReplicaSet
+
+With a ReplicatiionController a pod will b indefinitely restart if the pod stops
+
+With a job resource, pods are expected to run a specific task and then exit.
+
+3 main types of job:
+
+1. Non Parell Jobs
+2. Parallel jobs with a fixed completion count
+3. Parallel Jobs with a work queue.
+
+-------------------------------------
+
+1. Non parallel jobs:
+   The resource will monitor the job, and restart the pod if it fails or
+   gets deleted
+    - you can influence this with a restartPolicy attribute
+   When the pod successfully completed, the job itself will be completed.
+
+e.g.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    metadata:
+      name: pi
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never
+
+2. Parallel jobs with a fixed completion count:
+  - In this case a Job can run multiple pods in parallel
+  - You specify a fixed completion count
+  - The job is complete when completion count == successful exited pods
+  - To use: add "completions: " to the specification of your job.
+
+3. Parallel jobs with a work queue:
+   - In this case the pods should coordinate with themselves
+     (or an external service) to determine what each should work on.
+   - When any pod terminates with success, no more pods are created and the
+     job is considered completed.
+      This is because the pods should know themselves when all the work is done
+       (because they communicate with each other) at that point when a pod terminates with success,
+        then all pods should terminate because the job is completed.
+
+helpful commands
+
+...
