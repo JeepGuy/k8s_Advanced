@@ -1,0 +1,50 @@
+Scheduling with a CronJob
+
+ - Schedule jobs based on time
+   - once or
+   - reoccurringly
+
+Similar to CronTab in Linux/Unix Systems
+
+CronJob Schedule Schedule Format.
+
+Same as Linux 5 stars
+
+* * * * *
+
+minute, hour, day of month, month of year, day of week
+
+
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: my-cronjob
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - echo This commmand runs every minute
+          restartPolicy: OnFailure
+
+Must enable the Alpha API before trying to create.
+
+kops edit cluster.
+
+Edit the cluster add under spec:
+kubeAPIServer:
+ runtimeConfig:
+  batch/v2alpha1: "true"
+api:
+ dns: {}
+authorization:
+ alwaysAllow: {}
+
+...
