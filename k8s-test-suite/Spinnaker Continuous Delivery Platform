@@ -1,0 +1,53 @@
+Spinnaker is a Continuous Delivery platform
+
+It can automate deployments on different clour providers:
+  - AWS EC2, Google Compute/Container/App Engine
+    Azure, Openstack, and Kubernetes.
+Works only for immutable (cloud-native) apps.
+ - Forces you to deploy the whole app suite each time.
+
+ Created at NetFlix
+
+ - Also integrates with Continuous Integration tools (Jenkins, Travis), with
+   monitoring tools, and provides different deployment strategies.
+ * Can use Jenkins for your continuous build process and then Spinnaker can kick
+   off your deployment.
+    Can trigger from a Docker Build.
+
+2 Cores sets of features:
+
+Cluster Management:
+  - View and manage your cluster resources in the cloud or in this case - K8s.
+
+Deployment Management:
+ - Create and manage continuous delivery workflows
+ -  - This is where you create the delivery pipeline.
+
+Deployment Strategies:
+----------------------
+
+Red/black -  ( or blue / green)
+
+  - You have a series of pods with the old code and some with the new code with a load balancer
+  That at some point switches the traffic from the Red Pods to the Black pods.
+
+
+Rolling Red/black -
+
+ - Same as Red Black but you don't need two complete sets of pods, the load balancer
+   routes some traffic to the new Red pods and then slowly converts all the other pods.
+
+Canary - Analysis - a different environment that gets some traffic
+  - gets manual approval and then deploys to Prod using Red/Black strategy.
+
+  - This give you the added benefit of being able to test the new pods before
+    committing to all the changes and you can trigger a roll back if they don't work.
+  This is how NetFlix and other big companies deploy.
+
+READ MORE:    spinker.io/concepts
+
+
+ -
+
+
+   ...
