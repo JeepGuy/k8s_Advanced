@@ -1,0 +1,31 @@
+See first K8s course for initial information.
+
+Federation can be used to manage multiple clusters:
+ - Can sync resources across clusters
+  -- The same deployment version will run on cluster A and Cluster B
+- Can perform cross cluster discovery
+  -- One DNS record / Virtual IP (VIP) for a resource spanning multiple
+    clusters.
+
+Can help to achieve High Availability
+(spreading the load across clusters, enabling failover between clusters)
+
+
+Reasons to run multiple clusters:
+- Lower latency for distributed customers
+  -- (bring app geographically closer to the cluster)
+- Fault isolation when physical hardware (or a rack/zone) fails
+- Scale beyond the limitations of one cluster
+- Run clusters in a hybrid cloud environment
+  -- One cluster can run o premises, with failover to a cloud.
+
+Since Kubernetes 1.5 you can use a tool called kubefed to administer your clusters
+
+Kubefed can:
+  - Add / Remove cluters
+  - Deploy a Kubernetes federation control pane
+
+
+  
+
+...
