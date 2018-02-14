@@ -1,0 +1,18 @@
+Prometheus
+
+- an open source monitoring and alerting tool
+  - Similar to heapster + grafana setup fro the first K8s course, however can
+    do a lot more.
+-built at Soundcloud
+- Many companies and orgs have adopted it since.
+-Is now a stand alone and open source project at the Cloud Native Computing Foundation
+
+
+- Provides a multi-dimstional data model.
+  -- Time series identified by metric name and key/value pair
+- Has a flexible query language you can use
+- No distributed storage is necessary
+- Metric colleciton happens via a pull hodel over HTTP
+- Push is also supported using a gateway
+- Service Discovery supported
+- Web UI (dashboar) with graphing capabilities.
