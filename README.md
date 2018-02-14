@@ -1,7 +1,11 @@
 # k8s_Advanced
 Advanced Kubernetes Course notes
 
-This is a work in process.
+Based onthe Udemy.com course Learn DevOps: Advanced Kubernetes Usage
+
+By Edward Viaene found at:
+
+https://www.udemy.com/learn-devops-advanced-kubernetes-usage/learn/v4/overview
 
 
 
