@@ -1,0 +1,39 @@
+Linkerd
+=======
+
+- On kubernete you can run a lot of microservices on one cluster
+- It can quick become difficult to manager the endpoints of all the different
+  services that make up an application within the cluster:
+
+   - Service discovery in Kubernetes is pretty limited
+   - Routing is often on a round-robin based schedule.
+   - There is no failure handling
+     - Except removing that faile their healthcheck
+  - Difficult to visualize the different services.
+
+HTTP APIs can be basic and there is no failure handling:
+  - What happens then app A sends an HTTP GET requrest to app B, but B is temporary not available?
+  - if not written in the APP, the request will just fail and will not be re-tried.
+
+Linkerd can solve thee issues for us, and provide us many more features.
+========================================================================
+It is a Transparent proxy that adds:
+- Service Discovery
+- Routing
+   -- Latency aware load balancing
+   -- Can shift traffic to do canary deployments
+- Failure Handling
+   -- Using retires, deadlines adn circuit braking
+- Enables Visibility
+    -- Using Web UIs
+
+
+Runs as a DaemonSet on all nodes.
+
+ See visualization in the video to understand the data (request) flow.
+
+Linkerd find pods based on a variable MY_NODE_NAME set in the test node pod (created)
+
+Must pass a http_proxy value for the linkerd pod on each node.
+
+...

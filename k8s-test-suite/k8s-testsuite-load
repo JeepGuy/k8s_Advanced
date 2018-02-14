@@ -8,3 +8,7 @@ APIGroups:[""], Verbs:["update"]}]
 user=&{system:serviceaccount:kube-system:default 6cc62468-0d56-11e8-8a51-129442d9253a
 [system:serviceaccounts system:serviceaccounts:kube-system system:authenticated] map[]}
 ownerrules=[] ruleResolutionErrors=[]
+
+set RBAC to false adn re-ran...
+
+Not enough CPU power ... Ending test at this time. will re-attempt at a later time.
